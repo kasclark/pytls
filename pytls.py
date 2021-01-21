@@ -59,7 +59,9 @@ def exchange_ecc_public_keys():
 
 # Step 3: Validate the RSA digital signature of the packets you receive.
 
-# Step 4: Encrypt a message using AES in GCM mode.
+# Step 4: Encrypt/decrypt a message using AES in GCM mode.
+
+    
 
 
 
@@ -68,3 +70,7 @@ print("Generating public/private key pairs and establishing shared secret.")
 create_ecc_key_pairs()
 create_rsa_key_pairs()
 exchange_ecc_public_keys()
+
+print("Encrypt, send, receive, and decrypt the message using AES-GCM")
+secret_message = "The attack will happen at dawn!"
+print(secret_message)
