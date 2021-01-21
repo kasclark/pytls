@@ -66,11 +66,11 @@ def exchange_ecc_public_keys():
 
 
 # Main
-print("Generating public/private key pairs and establishing shared secret.")
+print("\nStep 1: Generating public/private key pairs and establishing shared secret.")
 create_ecc_key_pairs()
 create_rsa_key_pairs()
 exchange_ecc_public_keys()
 
-print("Encrypt, send, receive, and decrypt the message using AES-GCM")
+print("\nStep 4: Encrypt, send, receive, and decrypt the message using AES-GCM")
 secret_message = "The attack will happen at dawn!"
 print(secret_message)
