@@ -4,8 +4,12 @@
 
 # Libraries
 from tinyec import registry
-import secrets
+import secrets, binascii, os
 from Crypto.PublicKey import RSA
+from Crypto.Random import get_random_bytes
+from Crypto.Cipher import AES
+from Crypto.Protocol.KDF import scrypt
+from base64 import b64decode,b64encode
 
 # global variables
 
@@ -28,7 +32,7 @@ class Person:
 alice = Person("alice")
 bob = Person("bob")
 
-# Using Elliptic Curve Diffie-Hellman exchange to establish a shared secret.
+# Establish shared secret using Elliptic Curve Diffie-Hellman.
 # This will use the P-256 curve, approved by NIST SP 800-56A Rev 3.
 def compress(pubKey):
     return hex(pubKey.x) + hex(pubKey.y % 2)[2:]
@@ -40,13 +44,6 @@ def create_ecc_key_pairs():
     print("Alice's public ECC key: ", compress(alice.ecc_public_key))
     print("Bob's public ECC key:  ", compress(bob.ecc_public_key))
 
-# Public keys are signed with RSA before exchanging.
-def create_rsa_key_pairs():
-    alice.generate_rsa_key_pairs()
-    bob.generate_rsa_key_pairs()
-    print(f"Alice's public RSA key:  (n={hex(alice.RSA_keypair.n)}, e={hex(alice.RSA_keypair.e)})")
-    print(f"Bob's public RSA key:  (n={hex(alice.RSA_keypair.n)}, e={hex(alice.RSA_keypair.e)})")
-
 def exchange_ecc_public_keys():
     # In reality, this would be through the internet...
     alice.generate_ecc_shared_key(bob.ecc_public_key)
@@ -54,23 +51,38 @@ def exchange_ecc_public_keys():
     print("Alice's shared ECC key: ", compress(alice.ecc_shared_key))
     print("Bob's shared ECC key: ", compress(bob.ecc_shared_key))
 
+# Encrypt with AES-GCM and sign with RSA
+def encrypt(plain_text, shared_secret):
+    cipher = AES.new(shared_secret, AES.MODE_GCM)
+    cipher_text = cipher.encrypt(plain_text)
+    return (cipher_text, cipher.nonce)
 
-# Step 2: For each chunk of public information sent generate an RSA Digital Signature.
+def create_rsa_key_pairs():
+    alice.generate_rsa_key_pairs()
+    bob.generate_rsa_key_pairs()
+    print(f"Alice's public RSA key:  (n={hex(alice.RSA_keypair.n)}, e={hex(alice.RSA_keypair.e)})")
+    print(f"Bob's public RSA key:  (n={hex(alice.RSA_keypair.n)}, e={hex(alice.RSA_keypair.e)})")
 
-# Step 3: Validate the RSA digital signature of the packets you receive.
+# Decrypt and verify
 
-# Step 4: Encrypt/decrypt a message using AES in GCM mode.
+
+
 
     
 
 
 
 # Main
-print("\nStep 1: Generating public/private key pairs and establishing shared secret.")
+print("\nGenerate public/private key pairs and establishing shared secret.")
 create_ecc_key_pairs()
 create_rsa_key_pairs()
 exchange_ecc_public_keys()
 
-print("\nStep 4: Encrypt, send, receive, and decrypt the message using AES-GCM")
+print("\nEncrypt and send the message using AES-GCM.")
 secret_message = "The attack will happen at dawn!"
-print(secret_message)
+print("Alice's message: ", secret_message)
+# encrypted_message = encrypt(secret_message, compress(alice.ecc_shared_key))
+# print("Encrypted message: ", encrypted_message)
+
+
+print("\nVerify and decrypt the message.")
