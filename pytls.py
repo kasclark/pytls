@@ -6,9 +6,7 @@
 from tinyec import registry
 import secrets, binascii, os, hashlib
 from Crypto.PublicKey import RSA
-from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES
-#from Crypto.Protocol.KDF import scrypt
 
 
 # global variables
@@ -56,10 +54,11 @@ def encrypt(plain_text, shared_secret):
     return (cipher_text, cipher.nonce)
 
 # Sign with RSA
-
 def create_rsa_key_pairs():
     alice.generate_rsa_key_pairs()
     bob.generate_rsa_key_pairs()
+
+
 
 # Decrypt with AES-GCM
 def decrypt(encrypted_message, shared_secret):
@@ -105,6 +104,7 @@ print("\nALICE signs it with RSA.")
 print("\nALICE sends it to Bob...")
 
 print("\nBOB verifies the RSA signature.")
+# TODO
 
 print("\nBOB decrypts the AES message.")
 decrypted_text = decrypt(encrypted_message, bob.ecc_shared_key)
