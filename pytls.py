@@ -22,7 +22,7 @@ class Person:
         self.ecc_public_key = self.ecc_private_key * curve.g
 
     def generate_rsa_key_pairs(self):
-        self.RSA_keypair = RSA.generate(bits = 1024)
+        self.RSA_keypair = RSA.generate(bits = 4096)
 
     def generate_ecc_shared_key(self,key):
         self.ecc_shared_key = key * self.ecc_private_key
