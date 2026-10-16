@@ -12,11 +12,11 @@ Demonstrates:
 # Libraries
 from tinyec import registry
 import secrets
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import AES
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Cipher import AES
 from hashlib import sha256
-from Crypto.Hash import SHA256
-from Crypto.Signature import pss
+from Cryptodome.Hash import SHA256
+from Cryptodome.Signature import pss
 
 
 # Objects for Alice and Bob
